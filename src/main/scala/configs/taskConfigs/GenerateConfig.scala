@@ -1,8 +1,6 @@
 package configs.taskConfigs
 
-import configs.TaskConfig
-
-case class GenerateConfig(num: Int = 1) extends TaskConfig
+//case class GenerateConfig(num: Int = 1) extends TaskConfig
 
 //object GenerateConfig {
 //  def parse: OParser[Unit, Config] = {
