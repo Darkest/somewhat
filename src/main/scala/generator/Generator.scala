@@ -10,7 +10,7 @@ object Generator {
   def generate(config: GenerateConfig): Seq[(String, String)] = {
     for {
       _ <- 1 to config.num
-      record <- recordGenerator.sample
+      record <- recordGenerator().sample
     } yield record
   }
 
@@ -19,9 +19,11 @@ object Generator {
     Gen.oneOf(ls)
   }
 
+  val numStrGen = (n: Int) => Gen.listOfN(n, Gen.numChar).map(_.mkString)
+
   private def recordGenerator(idLen: Int = 20) =
     for {
-      id <- Gen.numStr()
+      id <- numStrGen(idLen)
       system <- systemGenerator
     } yield (id, system)
 

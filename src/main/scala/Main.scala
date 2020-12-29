@@ -1,6 +1,9 @@
 import configs.taskConfigs.GenerateConfig
-import configs.{Config}
+import configs.Config
 import generator.Generator.generate
+
+import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.file.{Files, OpenOption, Paths, StandardOpenOption}
 
 object Main extends App {
   import scopt.OParser
@@ -25,8 +28,9 @@ object Main extends App {
     case Some(config) =>
       config.generateTask match {
         case Some(genConf) =>
-          val output = generate(genConf).map{case (s1, s2) => s1 + genConf.sep + s2}.mkString("\n")
+          val output = generate(genConf).distinctBy(_._1).map{case (s1:String, s2:String) => s1 + genConf.sep + s2}.mkString("\n")
           println(output)
+          Files.writeString(Paths.get(genConf.writeTo), output, StandardCharsets.UTF_8, StandardOpenOption.CREATE)
         case None => println("No generate task is chosen! Choose one of (Generate, ... )")
       }
     case None =>
